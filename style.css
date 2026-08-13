@@ -1,0 +1,239 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f7fb;
+  color: #171717;
+}
+
+.container {
+  width: min(1100px, 92%);
+  margin: auto;
+  padding: 40px 0 70px;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+.logo {
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background: #111;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: 38px;
+}
+
+.hero p {
+  color: #666;
+  margin-top: 10px;
+}
+
+.upload-card {
+  background: white;
+  padding: 18px;
+  border-radius: 22px;
+  box-shadow: 0 8px 35px rgba(0, 0, 0, 0.06);
+}
+
+.drop-zone {
+  min-height: 260px;
+  border: 2px dashed #cfd3dc;
+  border-radius: 17px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.drop-zone:hover,
+.drop-zone.dragging {
+  border-color: #111;
+  background: #fafafa;
+}
+
+.upload-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #111;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  margin-bottom: 15px;
+}
+
+.drop-zone h2 {
+  margin: 5px 0;
+}
+
+.drop-zone p {
+  margin: 5px 0;
+  color: #666;
+}
+
+.drop-zone span {
+  margin-top: 10px;
+  color: #999;
+  font-size: 13px;
+}
+
+.status {
+  text-align: center;
+  margin-top: 12px;
+  min-height: 20px;
+  color: #555;
+}
+
+.gallery-section {
+  margin-top: 45px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-header h2 {
+  margin-bottom: 4px;
+}
+
+.section-header p {
+  margin-top: 0;
+  color: #777;
+}
+
+.secondary-button {
+  border: 1px solid #ddd;
+  background: white;
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.secondary-button:hover {
+  background: #f1f1f1;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+.image-card {
+  background: white;
+  border-radius: 17px;
+  overflow: hidden;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.06);
+}
+
+.image-preview {
+  width: 100%;
+  height: 190px;
+  object-fit: cover;
+  display: block;
+}
+
+.image-info {
+  padding: 13px;
+}
+
+.file-name {
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.file-size {
+  color: #888;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.image-actions {
+  display: flex;
+  gap: 7px;
+  margin-top: 12px;
+}
+
+.image-actions button {
+  flex: 1;
+  border: 0;
+  padding: 9px;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+.copy-button {
+  background: #111;
+  color: white;
+}
+
+.delete-button {
+  background: #eee;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 70px 20px;
+  color: #777;
+}
+
+.empty-state div {
+  font-size: 50px;
+  margin-bottom: 10px;
+}
+
+.empty-state h3 {
+  color: #333;
+  margin-bottom: 5px;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding-top: 25px;
+  }
+
+  .hero h1 {
+    font-size: 30px;
+  }
+
+  .drop-zone {
+    min-height: 220px;
+  }
+
+  .section-header {
+    align-items: flex-start;
+  }
+
+  .gallery {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .image-preview {
+    height: 140px;
+  }
+}
