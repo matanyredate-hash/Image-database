@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Database</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <main class="container">
+
+    <header class="hero">
+      <div class="logo">IMG</div>
+      <h1>Image Database</h1>
+      <p>אחסון וניהול תמונות במקום אחד</p>
+    </header>
+
+    <section class="upload-card">
+      <label class="drop-zone" id="dropZone">
+        <input
+          id="fileInput"
+          type="file"
+          accept="image/*"
+          multiple
+          hidden
+        >
+
+        <div class="upload-icon">↑</div>
+        <h2>העלה תמונות</h2>
+        <p>גרור תמונות לכאן או לחץ לבחירת קבצים</p>
+        <span>PNG · JPG · WEBP · GIF</span>
+      </label>
+
+      <div id="status"></div>
+    </section>
+
+    <section class="gallery-section">
+
+      <div class="section-header">
+        <div>
+          <h2>התמונות שלי</h2>
+          <p id="imageCount">0 תמונות</p>
+        </div>
+
+        <button id="clearButton" class="secondary-button">
+          נקה הכול
+        </button>
+      </div>
+
+      <div id="gallery" class="gallery"></div>
+
+      <div id="emptyState" class="empty-state">
+        <div>🖼️</div>
+        <h3>אין עדיין תמונות</h3>
+        <p>העלה תמונה כדי שהיא תופיע כאן</p>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
