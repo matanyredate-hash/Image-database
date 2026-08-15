@@ -9,60 +9,66 @@
 
 <body>
 
-<header class="topbar">
-  <div>
-    <h1>Image Database</h1>
-    <p>ספריית התמונות שלך</p>
+<header class="header">
+  <div class="brand">
+    <div class="logo">I</div>
+    <div>
+      <h1>Image Database</h1>
+      <p>ספריית התמונות שלך</p>
+    </div>
   </div>
 
-  <button id="newFolderButton" class="primary-button">
-    + תיקייה חדשה
+  <button id="newFolderBtn" class="primary-btn">
+    <span>＋</span>
+    תיקייה חדשה
   </button>
 </header>
 
 <main>
 
-  <!-- מסך התיקיות -->
-  <section id="foldersView">
+  <!-- מסך תיקיות -->
+  <section id="foldersPage">
 
-    <div class="section-title">
-      <h2>התיקיות שלי</h2>
-      <span id="folderCount">0 תיקיות</span>
+    <div class="page-heading">
+      <div>
+        <h2>התיקיות שלך</h2>
+        <p id="folderCount">0 תיקיות</p>
+      </div>
     </div>
 
     <div id="foldersGrid" class="folders-grid"></div>
 
-    <div id="emptyFolders" class="empty-state">
-      <div>📁</div>
-      <h2>אין עדיין תיקיות</h2>
-      <p>צור את התיקייה הראשונה שלך</p>
+    <div id="noFolders" class="empty">
+      <div class="empty-icon">📁</div>
+      <h3>עדיין אין תיקיות</h3>
+      <p>צור תיקייה חדשה כדי להתחיל</p>
     </div>
 
   </section>
 
 
   <!-- מסך תיקייה -->
-  <section id="folderView" class="hidden">
+  <section id="folderPage" class="hidden">
 
-    <div class="folder-header">
+    <div class="folder-top">
 
-      <button id="backButton" class="back-button">
-        → חזרה
+      <button id="backBtn" class="back-btn">
+        → תיקיות
       </button>
 
-      <div>
-        <h2 id="currentFolderName"></h2>
-        <span id="fileCount">0 קבצים</span>
+      <div class="folder-title">
+        <h2 id="folderTitle"></h2>
+        <p id="fileCount"></p>
       </div>
 
-      <div class="folder-actions">
+      <div class="actions">
 
-        <button id="autoPlayButton" class="secondary-button">
-          ▶️ גלילה אוטומטית
+        <button id="autoBtn" class="secondary-btn">
+          ▶ הצגה אוטומטית
         </button>
 
-        <label class="primary-button upload-button">
-          + הוסף קבצים
+        <label class="primary-btn upload-btn">
+          ＋ הוסף קבצים
           <input
             id="fileInput"
             type="file"
@@ -76,14 +82,14 @@
 
     </div>
 
-    <div id="status"></div>
+    <div id="uploadStatus" class="status"></div>
 
     <div id="filesGrid" class="files-grid"></div>
 
-    <div id="emptyFiles" class="empty-state">
-      <div>🖼️</div>
-      <h2>התיקייה ריקה</h2>
-      <p>הוסף תמונות לתיקייה</p>
+    <div id="noFiles" class="empty">
+      <div class="empty-icon">🖼️</div>
+      <h3>התיקייה ריקה</h3>
+      <p>הוסף תמונות כדי להתחיל</p>
     </div>
 
   </section>
@@ -91,25 +97,26 @@
 </main>
 
 
-<!-- חלון יצירת תיקייה -->
+<!-- יצירת תיקייה -->
+
 <div id="folderModal" class="modal hidden">
 
   <div class="modal-box">
 
-    <button id="closeModal" class="close-button">
-      ×
-    </button>
+    <button id="closeModal" class="modal-close">×</button>
+
+    <div class="modal-icon">📁</div>
 
     <h2>תיקייה חדשה</h2>
+    <p>בחר שם לתיקייה</p>
 
     <input
       id="folderName"
       type="text"
       placeholder="לדוגמה: אור התקווה 6"
-      autocomplete="off"
     >
 
-    <button id="createFolder" class="primary-button full">
+    <button id="createFolderBtn" class="primary-btn full">
       צור תיקייה
     </button>
 
@@ -119,39 +126,27 @@
 
 
 <!-- מציג תמונה -->
+
 <div id="viewer" class="viewer hidden">
 
-  <button id="closeViewer" class="viewer-close">
-    ×
-  </button>
+  <button id="closeViewer" class="viewer-close">×</button>
 
-  <button id="previousFile" class="viewer-arrow right">
-    →
-  </button>
+  <button id="prevBtn" class="viewer-arrow right">→</button>
 
-  <div class="viewer-content">
+  <div class="viewer-center">
 
     <img id="viewerImage" src="" alt="">
 
-    <div id="viewerName"></div>
+    <div id="viewerName" class="viewer-name"></div>
 
     <div class="viewer-controls">
-
-      <button id="viewerAutoPlay">
-        ▶️
-      </button>
-
-      <button id="viewerPause">
-        ⏸️
-      </button>
-
+      <button id="viewerPlay">▶</button>
+      <button id="viewerPause">⏸</button>
     </div>
 
   </div>
 
-  <button id="nextFile" class="viewer-arrow left">
-    ←
-  </button>
+  <button id="nextBtn" class="viewer-arrow left">←</button>
 
 </div>
 
