@@ -14,6 +14,22 @@ const headers = {
   Authorization: `Bearer ${SUPABASE_KEY}`
 };
 
+let images = [];
+
+function formatSize(bytes) {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) {
+    return `${(bytes / 1024).toFixed(1)} KB`;
+  }
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+function updateCount() {
+  const count = images.length;
+  imageCount.textContent =
+    count === 1 ? "תמונה אחת" : `${count} תמונות`;
+}
+
 async function uploadFile(file) {
   const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
   const path = `${Date.now()}-${crypto.randomUUID()}-${safeName}`;
@@ -24,23 +40,41 @@ async function uploadFile(file) {
       method: "POST",
       headers: {
         ...headers,
-        "Content-Type": file.type,
-        "x-upsert": "false"
+        "Content-Type": file.type
       },
       body: file
     }
   );
 
   if (!response.ok) {
-    const error = await response.text();
-    throw new Error(error);
+    throw new Error(await response.text());
   }
 
   return path;
 }
 
-function getPublicUrl(path) {
-  return `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${path}`;
+async function createSignedUrl(path) {
+  const response = await fetch(
+    `${SUPABASE_URL}/storage/v1/object/sign/${BUCKET}/${path}`,
+    {
+      method: "POST",
+      headers: {
+        ...headers,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        expiresIn: 3600
+      })
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(await response.text());
+  }
+
+  const data = await response.json();
+
+  return `${SUPABASE_URL}/storage/v1${data.signedURL}`;
 }
 
 async function uploadFiles(files) {
@@ -55,94 +89,87 @@ async function uploadFiles(files) {
 
   status.textContent = "מעלה תמונות...";
 
-  let uploaded = 0;
-
   for (const file of imageFiles) {
     try {
       const path = await uploadFile(file);
-      const url = getPublicUrl(path);
+      const url = await createSignedUrl(path);
 
-      addImageToGallery({
+      images.unshift({
         name: file.name,
         size: file.size,
+        path,
         url
       });
 
-      uploaded++;
-      status.textContent =
-        `הועלו ${uploaded} מתוך ${imageFiles.length}`;
+      render();
+
     } catch (error) {
       console.error(error);
-      status.textContent = "אירעה שגיאה בהעלאה.";
+      status.textContent = "שגיאה בהעלאה: " + error.message;
     }
   }
 
-  if (uploaded === imageFiles.length) {
-    status.textContent = "כל התמונות הועלו בהצלחה!";
-  }
+  status.textContent = "ההעלאה הסתיימה בהצלחה.";
+
+  setTimeout(() => {
+    status.textContent = "";
+  }, 3000);
 }
 
-function addImageToGallery(image) {
-  emptyState.style.display = "none";
+function render() {
+  gallery.innerHTML = "";
 
-  const card = document.createElement("article");
-  card.className = "image-card";
+  emptyState.style.display =
+    images.length === 0 ? "block" : "none";
 
-  const img = document.createElement("img");
-  img.className = "image-preview";
-  img.src = image.url;
-  img.alt = image.name;
+  images.forEach(image => {
+    const card = document.createElement("article");
+    card.className = "image-card";
 
-  const info = document.createElement("div");
-  info.className = "image-info";
+    const img = document.createElement("img");
+    img.className = "image-preview";
+    img.src = image.url;
+    img.alt = image.name;
 
-  const name = document.createElement("div");
-  name.className = "file-name";
-  name.textContent = image.name;
+    const info = document.createElement("div");
+    info.className = "image-info";
 
-  const size = document.createElement("div");
-  size.className = "file-size";
-  size.textContent = formatSize(image.size);
+    const name = document.createElement("div");
+    name.className = "file-name";
+    name.textContent = image.name;
 
-  const actions = document.createElement("div");
-  actions.className = "image-actions";
+    const size = document.createElement("div");
+    size.className = "file-size";
+    size.textContent = formatSize(image.size);
 
-  const copy = document.createElement("button");
-  copy.className = "copy-button";
-  copy.textContent = "העתק קישור";
+    const actions = document.createElement("div");
+    actions.className = "image-actions";
 
-  copy.onclick = async () => {
-    await navigator.clipboard.writeText(image.url);
-    copy.textContent = "הועתק ✓";
+    const copy = document.createElement("button");
+    copy.className = "copy-button";
+    copy.textContent = "העתק קישור";
 
-    setTimeout(() => {
-      copy.textContent = "העתק קישור";
-    }, 1500);
-  };
+    copy.onclick = async () => {
+      try {
+        await navigator.clipboard.writeText(image.url);
+        copy.textContent = "הועתק ✓";
 
-  actions.appendChild(copy);
+        setTimeout(() => {
+          copy.textContent = "העתק קישור";
+        }, 1500);
+      } catch {
+        alert("לא ניתן להעתיק את הקישור.");
+      }
+    };
 
-  info.append(name, size, actions);
-  card.append(img, info);
-  gallery.prepend(card);
+    actions.appendChild(copy);
+
+    info.append(name, size, actions);
+    card.append(img, info);
+    gallery.prepend(card);
+  });
 
   updateCount();
-}
-
-function formatSize(bytes) {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) {
-    return `${(bytes / 1024).toFixed(1)} KB`;
-  }
-
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-}
-
-function updateCount() {
-  const count = gallery.children.length;
-
-  imageCount.textContent =
-    count === 1 ? "תמונה אחת" : `${count} תמונות`;
 }
 
 fileInput.addEventListener("change", event => {
@@ -168,4 +195,4 @@ dropZone.addEventListener("drop", event => {
   uploadFiles(event.dataTransfer.files);
 });
 
-updateCount();
+render();
