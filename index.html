@@ -8,58 +8,155 @@
 </head>
 
 <body>
-  <main class="container">
 
-    <header class="hero">
-      <div class="logo">IMG</div>
-      <h1>Image Database</h1>
-      <p>אחסון וניהול תמונות במקום אחד</p>
-    </header>
+<header class="topbar">
+  <div>
+    <h1>Image Database</h1>
+    <p>ספריית התמונות שלך</p>
+  </div>
 
-    <section class="upload-card">
-      <label class="drop-zone" id="dropZone">
-        <input
-          id="fileInput"
-          type="file"
-          accept="image/*"
-          multiple
-          hidden
-        >
+  <button id="newFolderButton" class="primary-button">
+    + תיקייה חדשה
+  </button>
+</header>
 
-        <div class="upload-icon">↑</div>
-        <h2>העלה תמונות</h2>
-        <p>גרור תמונות לכאן או לחץ לבחירת קבצים</p>
-        <span>PNG · JPG · WEBP · GIF</span>
-      </label>
+<main>
 
-      <div id="status"></div>
-    </section>
+  <!-- מסך התיקיות -->
+  <section id="foldersView">
 
-    <section class="gallery-section">
+    <div class="section-title">
+      <h2>התיקיות שלי</h2>
+      <span id="folderCount">0 תיקיות</span>
+    </div>
 
-      <div class="section-header">
-        <div>
-          <h2>התמונות שלי</h2>
-          <p id="imageCount">0 תמונות</p>
-        </div>
+    <div id="foldersGrid" class="folders-grid"></div>
 
-        <button id="clearButton" class="secondary-button">
-          נקה הכול
+    <div id="emptyFolders" class="empty-state">
+      <div>📁</div>
+      <h2>אין עדיין תיקיות</h2>
+      <p>צור את התיקייה הראשונה שלך</p>
+    </div>
+
+  </section>
+
+
+  <!-- מסך תיקייה -->
+  <section id="folderView" class="hidden">
+
+    <div class="folder-header">
+
+      <button id="backButton" class="back-button">
+        → חזרה
+      </button>
+
+      <div>
+        <h2 id="currentFolderName"></h2>
+        <span id="fileCount">0 קבצים</span>
+      </div>
+
+      <div class="folder-actions">
+
+        <button id="autoPlayButton" class="secondary-button">
+          ▶️ גלילה אוטומטית
         </button>
+
+        <label class="primary-button upload-button">
+          + הוסף קבצים
+          <input
+            id="fileInput"
+            type="file"
+            accept="image/*"
+            multiple
+            hidden
+          >
+        </label>
+
       </div>
 
-      <div id="gallery" class="gallery"></div>
+    </div>
 
-      <div id="emptyState" class="empty-state">
-        <div>🖼️</div>
-        <h3>אין עדיין תמונות</h3>
-        <p>העלה תמונה כדי שהיא תופיע כאן</p>
-      </div>
+    <div id="status"></div>
 
-    </section>
+    <div id="filesGrid" class="files-grid"></div>
 
-  </main>
+    <div id="emptyFiles" class="empty-state">
+      <div>🖼️</div>
+      <h2>התיקייה ריקה</h2>
+      <p>הוסף תמונות לתיקייה</p>
+    </div>
 
-  <script src="app.js"></script>
+  </section>
+
+</main>
+
+
+<!-- חלון יצירת תיקייה -->
+<div id="folderModal" class="modal hidden">
+
+  <div class="modal-box">
+
+    <button id="closeModal" class="close-button">
+      ×
+    </button>
+
+    <h2>תיקייה חדשה</h2>
+
+    <input
+      id="folderName"
+      type="text"
+      placeholder="לדוגמה: אור התקווה 6"
+      autocomplete="off"
+    >
+
+    <button id="createFolder" class="primary-button full">
+      צור תיקייה
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- מציג תמונה -->
+<div id="viewer" class="viewer hidden">
+
+  <button id="closeViewer" class="viewer-close">
+    ×
+  </button>
+
+  <button id="previousFile" class="viewer-arrow right">
+    →
+  </button>
+
+  <div class="viewer-content">
+
+    <img id="viewerImage" src="" alt="">
+
+    <div id="viewerName"></div>
+
+    <div class="viewer-controls">
+
+      <button id="viewerAutoPlay">
+        ▶️
+      </button>
+
+      <button id="viewerPause">
+        ⏸️
+      </button>
+
+    </div>
+
+  </div>
+
+  <button id="nextFile" class="viewer-arrow left">
+    ←
+  </button>
+
+</div>
+
+
+<script src="app.js"></script>
+
 </body>
 </html>
