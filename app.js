@@ -1,6 +1,6 @@
 const SUPABASE_URL = "https://ildsvtjxnwibeteyzjnd.supabase.co";
 const SUPABASE_KEY = "sb_publishable_vhm95tfhxdNjB33lOsaaaQ_KZf-msmZ";
-const BUCKET = "image";
+const BUCKET = "images";
 const fileInput = document.getElementById("fileInput");
 const dropZone = document.getElementById("dropZone");
 const gallery = document.getElementById("gallery");
