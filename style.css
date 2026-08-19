@@ -557,3 +557,111 @@ main {
     left: 8px;
   }
 }
+/* =========================
+   Delete Buttons
+========================= */
+
+.folder-card,
+.file-card {
+  position: relative;
+}
+
+/* כפתור מחיקת תיקייה */
+.delete-folder-btn {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+
+  width: 36px;
+  height: 36px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.92);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 17px;
+
+  cursor: pointer;
+
+  opacity: 0;
+  transform: scale(0.9);
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+/* כפתור מחיקת קובץ */
+.delete-file-btn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+
+  width: 34px;
+  height: 34px;
+
+  border: none;
+  border-radius: 9px;
+
+  background: rgba(255, 255, 255, 0.92);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 16px;
+
+  cursor: pointer;
+
+  opacity: 0;
+  transform: scale(0.9);
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+
+/* הצגת הכפתור במעבר עכבר */
+
+.folder-card:hover .delete-folder-btn,
+.file-card:hover .delete-file-btn {
+  opacity: 1;
+  transform: scale(1);
+}
+
+
+/* hover */
+
+.delete-folder-btn:hover,
+.delete-file-btn:hover {
+  background: #ffe8e8;
+  transform: scale(1.08);
+}
+
+
+/* לחיצה */
+
+.delete-folder-btn:active,
+.delete-file-btn:active {
+  transform: scale(0.94);
+}
+
+
+/* במובייל הכפתור תמיד נראה */
+
+@media (max-width: 700px) {
+
+  .delete-folder-btn,
+  .delete-file-btn {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
