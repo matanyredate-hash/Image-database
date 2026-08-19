@@ -966,3 +966,24 @@ async function deleteFile(file, index) {
     );
   }
 }
+const deleteButton =
+  document.createElement("button");
+
+deleteButton.className =
+  "delete-file-btn";
+
+deleteButton.textContent =
+  "🗑️";
+
+deleteButton.title =
+  "מחיקת קובץ";
+
+deleteButton.onclick =
+  (event) => {
+
+    event.stopPropagation();
+
+    deleteFile(file, index);
+  };
+
+info.appendChild(deleteButton);
