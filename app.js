@@ -12,7 +12,49 @@ const headers = {
 };
 
 
-/* Elements */
+/* =========================
+   API
+========================= */
+
+async function api(path, options = {}) {
+
+  const response = await fetch(
+    `${SUPABASE_URL}/rest/v1/${path}`,
+    {
+      ...options,
+
+      headers: {
+        ...headers,
+        "Content-Type": "application/json",
+        "Prefer": "return=representation",
+        ...(options.headers || {})
+      }
+    }
+  );
+
+  const text = await response.text();
+
+  if (!response.ok) {
+    throw new Error(
+      text || `HTTP ${response.status}`
+    );
+  }
+
+  if (!text.trim()) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(text);
+  } catch {
+    return text;
+  }
+}
+
+
+/* =========================
+   Elements
+========================= */
 
 const foldersPage =
   document.getElementById("foldersPage");
@@ -93,7 +135,9 @@ const viewerPause =
   document.getElementById("viewerPause");
 
 
-/* State */
+/* =========================
+   State
+========================= */
 
 let currentFolder = null;
 let currentFiles = [];
@@ -101,75 +145,9 @@ let viewerIndex = 0;
 let autoTimer = null;
 
 
-/* API */
-
-async function api(path, options = {}) {
-  const response = await fetch(
-    `${SUPABASE_URL}/rest/v1/${path}`,
-    {
-      ...options,
-      headers: {
-        ...headers,
-        "Content-Type": "application/json",
-        "Prefer": "return=representation",
-        ...(options.headers || {})
-      }
-    }
-  );
-
-  const text = await response.text();
-
-  if (!response.ok) {
-    throw new Error(text || `HTTP ${response.status}`);
-  }
-
-  if (!text.trim()) {
-    return null;
-  }
-
-  try {
-    return JSON.parse(text);
-  } catch {
-    return text;
-  }
-}
-
-  const response =
-    await fetch(
-      `${SUPABASE_URL}/rest/v1/${path}`,
-      {
-        ...options,
-
-        headers: {
-          ...headers,
-
-          "Content-Type":
-            "application/json",
-
-          ...(options.headers || {})
-        }
-      }
-    );
-
-  if (!response.ok) {
-
-    const text =
-      await response.text();
-
-    throw new Error(text);
-  }
-
-  if (response.status === 204) {
-    return null;
-  }
-
-  return response.json();
-}
-
-
-/* -----------------------
+/* =========================
    Folders
------------------------ */
+========================= */
 
 async function loadFolders() {
 
@@ -200,32 +178,83 @@ async function loadFolders() {
           `files?select=id&folder_id=eq.${folder.id}`
         );
 
+
       const card =
         document.createElement("div");
 
       card.className =
         "folder-card";
 
-      card.innerHTML = `
-        <div class="folder-icon">📁</div>
-        <div class="folder-name"></div>
-        <div class="folder-files"></div>
-      `;
 
-      card.querySelector(
-        ".folder-name"
-      ).textContent =
+      const icon =
+        document.createElement("div");
+
+      icon.className =
+        "folder-icon";
+
+      icon.textContent =
+        "📁";
+
+
+      const name =
+        document.createElement("div");
+
+      name.className =
+        "folder-name";
+
+      name.textContent =
         folder.name;
 
-      card.querySelector(
-        ".folder-files"
-      ).textContent =
+
+      const count =
+        document.createElement("div");
+
+      count.className =
+        "folder-files";
+
+      count.textContent =
         files.length === 1
           ? "קובץ אחד"
           : `${files.length} קבצים`;
 
-      card.onclick =
-        () => openFolder(folder);
+
+      /* כפתור מחיקה */
+
+      const deleteButton =
+        document.createElement("button");
+
+      deleteButton.className =
+        "delete-folder-btn";
+
+      deleteButton.textContent =
+        "🗑️";
+
+      deleteButton.title =
+        "מחיקת תיקייה";
+
+
+      deleteButton.addEventListener(
+        "click",
+        event => {
+
+          event.stopPropagation();
+
+          deleteFolder(folder);
+        }
+      );
+
+
+      card.appendChild(icon);
+      card.appendChild(name);
+      card.appendChild(count);
+      card.appendChild(deleteButton);
+
+
+      card.addEventListener(
+        "click",
+        () => openFolder(folder)
+      );
+
 
       foldersGrid.appendChild(card);
     }
@@ -235,38 +264,48 @@ async function loadFolders() {
     console.error(error);
 
     alert(
-      "לא ניתן לטעון את התיקיות."
+      "לא ניתן לטעון את התיקיות.\n\n" +
+      error.message
     );
   }
 }
 
 
-/* Create folder */
+/* =========================
+   Create Folder
+========================= */
 
-newFolderBtn.onclick = () => {
+newFolderBtn.addEventListener(
+  "click",
+  () => {
 
-  folderModal.classList.remove(
-    "hidden"
-  );
+    folderModal.classList.remove(
+      "hidden"
+    );
 
-  folderName.value = "";
+    folderName.value = "";
 
-  setTimeout(
-    () => folderName.focus(),
-    100
-  );
-};
-
-
-closeModal.onclick = () => {
-
-  folderModal.classList.add(
-    "hidden"
-  );
-};
+    setTimeout(
+      () => folderName.focus(),
+      100
+    );
+  }
+);
 
 
-createFolderBtn.onclick =
+closeModal.addEventListener(
+  "click",
+  () => {
+
+    folderModal.classList.add(
+      "hidden"
+    );
+  }
+);
+
+
+createFolderBtn.addEventListener(
+  "click",
   async () => {
 
     const name =
@@ -281,7 +320,9 @@ createFolderBtn.onclick =
       return;
     }
 
+
     createFolderBtn.disabled = true;
+
 
     try {
 
@@ -297,9 +338,11 @@ createFolderBtn.onclick =
         }
       );
 
+
       folderModal.classList.add(
         "hidden"
       );
+
 
       await loadFolders();
 
@@ -308,14 +351,16 @@ createFolderBtn.onclick =
       console.error(error);
 
       alert(
-        "לא ניתן ליצור את התיקייה."
+        "לא ניתן ליצור את התיקייה.\n\n" +
+        error.message
       );
 
     } finally {
 
       createFolderBtn.disabled = false;
     }
-  };
+  }
+);
 
 
 folderName.addEventListener(
@@ -333,13 +378,123 @@ folderName.addEventListener(
 );
 
 
-/* -----------------------
-   Open folder
------------------------ */
+/* =========================
+   Delete Folder
+========================= */
+
+async function deleteFolder(folder) {
+
+  const confirmed =
+    confirm(
+      `למחוק את התיקייה "${folder.name}"?\n\n` +
+      `כל הקבצים שבתוכה יימחקו גם הם.`
+    );
+
+
+  if (!confirmed) {
+    return;
+  }
+
+
+  try {
+
+    uploadStatus.textContent =
+      "מוחק תיקייה...";
+
+
+    /* קבלת הקבצים */
+
+    const files =
+      await api(
+        `files?select=*&folder_id=eq.${folder.id}`
+      );
+
+
+    /* מחיקת הקבצים מה-Storage */
+
+    for (const file of files) {
+
+      const response =
+        await fetch(
+          `${SUPABASE_URL}/storage/v1/object/${BUCKET}/${file.storage_path}`,
+          {
+            method: "DELETE",
+            headers
+          }
+        );
+
+
+      if (!response.ok) {
+
+        const errorText =
+          await response.text();
+
+        throw new Error(
+          errorText ||
+          `Storage error ${response.status}`
+        );
+      }
+    }
+
+
+    /* מחיקת הרשומות */
+
+    await api(
+      `files?folder_id=eq.${folder.id}`,
+      {
+        method: "DELETE"
+      }
+    );
+
+
+    /* מחיקת התיקייה */
+
+    await api(
+      `folders?id=eq.${folder.id}`,
+      {
+        method: "DELETE"
+      }
+    );
+
+
+    uploadStatus.textContent =
+      "התיקייה נמחקה בהצלחה.";
+
+
+    await loadFolders();
+
+
+    setTimeout(
+      () => {
+        uploadStatus.textContent = "";
+      },
+      2000
+    );
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "מחיקת התיקייה נכשלה.\n\n" +
+      error.message
+    );
+
+    uploadStatus.textContent = "";
+  }
+}
+
+
+/* =========================
+   Open Folder
+========================= */
 
 async function openFolder(folder) {
 
-  currentFolder = folder;
+  currentFolder =
+    folder;
+
 
   foldersPage.classList.add(
     "hidden"
@@ -349,34 +504,39 @@ async function openFolder(folder) {
     "hidden"
   );
 
+
   folderTitle.textContent =
     folder.name;
+
 
   await loadFiles();
 }
 
 
-backBtn.onclick = () => {
+backBtn.addEventListener(
+  "click",
+  () => {
 
-  stopAutoPlay();
+    stopAutoPlay();
 
-  folderPage.classList.add(
-    "hidden"
-  );
+    folderPage.classList.add(
+      "hidden"
+    );
 
-  foldersPage.classList.remove(
-    "hidden"
-  );
+    foldersPage.classList.remove(
+      "hidden"
+    );
 
-  currentFolder = null;
+    currentFolder = null;
 
-  loadFolders();
-};
+    loadFolders();
+  }
+);
 
 
-/* -----------------------
+/* =========================
    Files
------------------------ */
+========================= */
 
 async function loadFiles() {
 
@@ -387,6 +547,7 @@ async function loadFiles() {
         `files?select=*&folder_id=eq.${currentFolder.id}&order=created_at.asc`
       );
 
+
     await renderFiles();
 
   } catch (error) {
@@ -394,7 +555,8 @@ async function loadFiles() {
     console.error(error);
 
     alert(
-      "לא ניתן לטעון את הקבצים."
+      "לא ניתן לטעון את הקבצים.\n\n" +
+      error.message
     );
   }
 }
@@ -404,10 +566,12 @@ async function renderFiles() {
 
   filesGrid.innerHTML = "";
 
+
   fileCount.textContent =
     currentFiles.length === 1
       ? "קובץ אחד"
       : `${currentFiles.length} קבצים`;
+
 
   noFiles.style.display =
     currentFiles.length
@@ -424,11 +588,13 @@ async function renderFiles() {
     const file =
       currentFiles[index];
 
+
     const card =
       document.createElement("div");
 
     card.className =
       "file-card";
+
 
     const img =
       document.createElement("img");
@@ -439,13 +605,13 @@ async function renderFiles() {
     img.alt =
       file.name;
 
-    img.src = "";
 
     const info =
       document.createElement("div");
 
     info.className =
       "file-info";
+
 
     const name =
       document.createElement("div");
@@ -456,18 +622,49 @@ async function renderFiles() {
     name.textContent =
       file.name;
 
+
+    /* כפתור מחיקה */
+
+    const deleteButton =
+      document.createElement("button");
+
+    deleteButton.className =
+      "delete-file-btn";
+
+    deleteButton.textContent =
+      "🗑️";
+
+    deleteButton.title =
+      "מחיקת קובץ";
+
+
+    deleteButton.addEventListener(
+      "click",
+      event => {
+
+        event.stopPropagation();
+
+        deleteFile(file);
+      }
+    );
+
+
     info.appendChild(name);
+    info.appendChild(deleteButton);
+
 
     card.appendChild(img);
     card.appendChild(info);
 
-    card.onclick =
-      () => openViewer(index);
+
+    card.addEventListener(
+      "click",
+      () => openViewer(index)
+    );
+
 
     filesGrid.appendChild(card);
 
-
-    /* Signed URL */
 
     try {
 
@@ -487,13 +684,97 @@ async function renderFiles() {
 }
 
 
-/* -----------------------
-   Signed URL
------------------------ */
+/* =========================
+   Delete File
+========================= */
 
-async function createSignedUrl(
-  path
-) {
+async function deleteFile(file) {
+
+  const confirmed =
+    confirm(
+      `למחוק את "${file.name}"?`
+    );
+
+
+  if (!confirmed) {
+    return;
+  }
+
+
+  try {
+
+    uploadStatus.textContent =
+      "מוחק קובץ...";
+
+
+    /* Storage */
+
+    const response =
+      await fetch(
+        `${SUPABASE_URL}/storage/v1/object/${BUCKET}/${file.storage_path}`,
+        {
+          method: "DELETE",
+          headers
+        }
+      );
+
+
+    if (!response.ok) {
+
+      const errorText =
+        await response.text();
+
+      throw new Error(
+        errorText ||
+        `Storage error ${response.status}`
+      );
+    }
+
+
+    /* Database */
+
+    await api(
+      `files?id=eq.${file.id}`,
+      {
+        method: "DELETE"
+      }
+    );
+
+
+    uploadStatus.textContent =
+      "הקובץ נמחק בהצלחה.";
+
+
+    await loadFiles();
+
+
+    setTimeout(
+      () => {
+        uploadStatus.textContent = "";
+      },
+      2000
+    );
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "מחיקת הקובץ נכשלה.\n\n" +
+      error.message
+    );
+
+    uploadStatus.textContent = "";
+  }
+}
+
+
+/* =========================
+   Signed URL
+========================= */
+
+async function createSignedUrl(path) {
 
   const response =
     await fetch(
@@ -504,7 +785,6 @@ async function createSignedUrl(
 
         headers: {
           ...headers,
-
           "Content-Type":
             "application/json"
         },
@@ -528,6 +808,7 @@ async function createSignedUrl(
   const data =
     await response.json();
 
+
   return (
     `${SUPABASE_URL}/storage/v1` +
     data.signedURL
@@ -535,9 +816,9 @@ async function createSignedUrl(
 }
 
 
-/* -----------------------
+/* =========================
    Upload
------------------------ */
+========================= */
 
 fileInput.addEventListener(
   "change",
@@ -546,11 +827,14 @@ fileInput.addEventListener(
     const files =
       [...event.target.files];
 
+
     if (!files.length) {
       return;
     }
 
+
     await uploadFiles(files);
+
 
     fileInput.value = "";
   }
@@ -593,13 +877,13 @@ async function uploadFiles(files) {
 
               file_size:
                 file.size
-
             })
         }
       );
 
 
       uploaded++;
+
 
       uploadStatus.textContent =
         `הועלו ${uploaded} מתוך ${files.length}`;
@@ -611,6 +895,13 @@ async function uploadFiles(files) {
 
       uploadStatus.textContent =
         "שגיאה בהעלאת קובץ.";
+
+      alert(
+        "העלאה נכשלה.\n\n" +
+        error.message
+      );
+
+      return;
     }
   }
 
@@ -653,7 +944,6 @@ async function uploadFile(file) {
 
         headers: {
           ...headers,
-
           "Content-Type":
             file.type
         },
@@ -675,17 +965,20 @@ async function uploadFile(file) {
 }
 
 
-/* -----------------------
+/* =========================
    Viewer
------------------------ */
+========================= */
 
 async function openViewer(index) {
 
-  viewerIndex = index;
+  viewerIndex =
+    index;
+
 
   viewer.classList.remove(
     "hidden"
   );
+
 
   await showViewerFile();
 }
@@ -696,6 +989,7 @@ async function showViewerFile() {
   const file =
     currentFiles[viewerIndex];
 
+
   if (!file) {
     return;
   }
@@ -703,6 +997,7 @@ async function showViewerFile() {
 
   viewerName.textContent =
     file.name;
+
 
   viewerImage.src = "";
 
@@ -757,16 +1052,20 @@ function previousFile() {
 }
 
 
-nextBtn.onclick =
-  nextFile;
+nextBtn.addEventListener(
+  "click",
+  nextFile
+);
 
-prevBtn.onclick =
-  previousFile;
+prevBtn.addEventListener(
+  "click",
+  previousFile
+);
 
 
-/* -----------------------
-   Auto play
------------------------ */
+/* =========================
+   Auto Play
+========================= */
 
 function startAutoPlay() {
 
@@ -792,13 +1091,12 @@ function startAutoPlay() {
   autoTimer =
     setInterval(
       nextFile,
-      4000
+      6000
     );
 
 
   autoBtn.textContent =
     "⏸ עצור";
-
 }
 
 
@@ -808,61 +1106,74 @@ function stopAutoPlay() {
     autoTimer
   );
 
-  autoTimer = null;
+
+  autoTimer =
+    null;
+
 
   autoBtn.textContent =
     "▶ הצגה אוטומטית";
 }
 
 
-autoBtn.onclick = () => {
+autoBtn.addEventListener(
+  "click",
+  () => {
 
-  if (autoTimer) {
-    stopAutoPlay();
-  } else {
-    startAutoPlay();
+    if (autoTimer) {
+      stopAutoPlay();
+    } else {
+      startAutoPlay();
+    }
   }
-};
+);
 
 
-viewerPlay.onclick =
-  startAutoPlay;
+viewerPlay.addEventListener(
+  "click",
+  startAutoPlay
+);
 
-viewerPause.onclick =
-  stopAutoPlay;
+
+viewerPause.addEventListener(
+  "click",
+  stopAutoPlay
+);
 
 
-/* -----------------------
-   Close viewer
------------------------ */
+/* =========================
+   Close Viewer
+========================= */
 
-closeViewer.onclick = () => {
+closeViewer.addEventListener(
+  "click",
+  () => {
 
-  stopAutoPlay();
+    stopAutoPlay();
 
-  viewer.classList.add(
-    "hidden"
-  );
+    viewer.classList.add(
+      "hidden"
+    );
 
-  viewerImage.src = "";
-};
+    viewerImage.src = "";
+  }
+);
 
 
 viewer.addEventListener(
   "click",
   event => {
 
-    if (
-      event.target === viewer
-    ) {
-
+    if (event.target === viewer) {
       closeViewer.click();
     }
   }
 );
 
 
-/* Keyboard */
+/* =========================
+   Keyboard
+========================= */
 
 document.addEventListener(
   "keydown",
@@ -877,181 +1188,25 @@ document.addEventListener(
     }
 
 
-    if (
-      event.key === "ArrowLeft"
-    ) {
+    if (event.key === "ArrowLeft") {
       nextFile();
     }
 
 
-    if (
-      event.key === "ArrowRight"
-    ) {
+    if (event.key === "ArrowRight") {
       previousFile();
     }
 
 
-    if (
-      event.key === "Escape"
-    ) {
+    if (event.key === "Escape") {
       closeViewer.click();
     }
   }
 );
 
 
-/* Start */
+/* =========================
+   Start
+========================= */
 
 loadFolders();
-
-async function deleteFile(file, index) {
-
-  const confirmed = confirm(
-    `למחוק את "${file.name}"?`
-  );
-
-  if (!confirmed) {
-    return;
-  }
-
-  try {
-
-    uploadStatus.textContent = "מוחק...";
-
-    // מחיקת הקובץ מה-Storage
-    const storageResponse = await fetch(
-      `${SUPABASE_URL}/storage/v1/object/${BUCKET}/${file.storage_path}`,
-      {
-        method: "DELETE",
-        headers: headers
-      }
-    );
-
-    if (!storageResponse.ok) {
-      const errorText =
-        await storageResponse.text();
-
-      throw new Error(errorText);
-    }
-
-
-    // מחיקת הרשומה מהטבלה
-    await api(
-      `files?id=eq.${file.id}`,
-      {
-        method: "DELETE"
-      }
-    );
-
-
-    uploadStatus.textContent =
-      "הקובץ נמחק בהצלחה.";
-
-    await loadFiles();
-
-    setTimeout(() => {
-      uploadStatus.textContent = "";
-    }, 2000);
-
-  } catch (error) {
-
-    console.error(error);
-
-    uploadStatus.textContent =
-      "מחיקת הקובץ נכשלה.";
-
-    alert(
-      "לא ניתן למחוק את הקובץ.\n\n" +
-      error.message
-    );
-  }
-}
-const deleteButton =
-  document.createElement("button");
-
-deleteButton.className =
-  "delete-file-btn";
-
-deleteButton.textContent =
-  "🗑️";
-
-deleteButton.title =
-  "מחיקת קובץ";
-
-deleteButton.onclick =
-  (event) => {
-
-    event.stopPropagation();
-
-    deleteFile(file, index);
-  };
-
-info.appendChild(deleteButton);
-async function deleteFolder(folder) {
-
-  const confirmed = confirm(
-    `למחוק את התיקייה "${folder.name}" וכל הקבצים שבתוכה?`
-  );
-
-  if (!confirmed) {
-    return;
-  }
-
-  try {
-
-    // קבלת כל הקבצים בתיקייה
-    const files = await api(
-      `files?select=*&folder_id=eq.${folder.id}`
-    );
-
-
-    // מחיקת הקבצים מה-Storage
-    for (const file of files) {
-
-      const response = await fetch(
-        `${SUPABASE_URL}/storage/v1/object/${BUCKET}/${file.storage_path}`,
-        {
-          method: "DELETE",
-          headers: headers
-        }
-      );
-
-      if (!response.ok) {
-
-        throw new Error(
-          await response.text()
-        );
-      }
-    }
-
-
-    // מחיקת רשומות הקבצים
-    await api(
-      `files?folder_id=eq.${folder.id}`,
-      {
-        method: "DELETE"
-      }
-    );
-
-
-    // מחיקת התיקייה
-    await api(
-      `folders?id=eq.${folder.id}`,
-      {
-        method: "DELETE"
-      }
-    );
-
-
-    await loadFolders();
-
-  } catch (error) {
-
-    console.error(error);
-
-    alert(
-      "מחיקת התיקייה נכשלה.\n\n" +
-      error.message
-    );
-  }
-}
