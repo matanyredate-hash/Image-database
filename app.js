@@ -903,3 +903,66 @@ document.addEventListener(
 /* Start */
 
 loadFolders();
+
+async function deleteFile(file, index) {
+
+  const confirmed = confirm(
+    `למחוק את "${file.name}"?`
+  );
+
+  if (!confirmed) {
+    return;
+  }
+
+  try {
+
+    uploadStatus.textContent = "מוחק...";
+
+    // מחיקת הקובץ מה-Storage
+    const storageResponse = await fetch(
+      `${SUPABASE_URL}/storage/v1/object/${BUCKET}/${file.storage_path}`,
+      {
+        method: "DELETE",
+        headers: headers
+      }
+    );
+
+    if (!storageResponse.ok) {
+      const errorText =
+        await storageResponse.text();
+
+      throw new Error(errorText);
+    }
+
+
+    // מחיקת הרשומה מהטבלה
+    await api(
+      `files?id=eq.${file.id}`,
+      {
+        method: "DELETE"
+      }
+    );
+
+
+    uploadStatus.textContent =
+      "הקובץ נמחק בהצלחה.";
+
+    await loadFiles();
+
+    setTimeout(() => {
+      uploadStatus.textContent = "";
+    }, 2000);
+
+  } catch (error) {
+
+    console.error(error);
+
+    uploadStatus.textContent =
+      "מחיקת הקובץ נכשלה.";
+
+    alert(
+      "לא ניתן למחוק את הקובץ.\n\n" +
+      error.message
+    );
+  }
+}
