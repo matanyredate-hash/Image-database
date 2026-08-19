@@ -987,3 +987,71 @@ deleteButton.onclick =
   };
 
 info.appendChild(deleteButton);
+async function deleteFolder(folder) {
+
+  const confirmed = confirm(
+    `למחוק את התיקייה "${folder.name}" וכל הקבצים שבתוכה?`
+  );
+
+  if (!confirmed) {
+    return;
+  }
+
+  try {
+
+    // קבלת כל הקבצים בתיקייה
+    const files = await api(
+      `files?select=*&folder_id=eq.${folder.id}`
+    );
+
+
+    // מחיקת הקבצים מה-Storage
+    for (const file of files) {
+
+      const response = await fetch(
+        `${SUPABASE_URL}/storage/v1/object/${BUCKET}/${file.storage_path}`,
+        {
+          method: "DELETE",
+          headers: headers
+        }
+      );
+
+      if (!response.ok) {
+
+        throw new Error(
+          await response.text()
+        );
+      }
+    }
+
+
+    // מחיקת רשומות הקבצים
+    await api(
+      `files?folder_id=eq.${folder.id}`,
+      {
+        method: "DELETE"
+      }
+    );
+
+
+    // מחיקת התיקייה
+    await api(
+      `folders?id=eq.${folder.id}`,
+      {
+        method: "DELETE"
+      }
+    );
+
+
+    await loadFolders();
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "מחיקת התיקייה נכשלה.\n\n" +
+      error.message
+    );
+  }
+}
