@@ -1,17 +1,67 @@
+/* =========================================================
+   Image Database — Professional Clean UI
+   ========================================================= */
+
 * {
   box-sizing: border-box;
 }
 
 :root {
-  font-family: Arial, Helvetica, sans-serif;
-  color: #171717;
-  background: #f6f7f9;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+
+  color: #172033;
+  background: #f7f8fa;
+
+  --primary: #1f2937;
+  --primary-hover: #111827;
+
+  --text: #172033;
+  --muted: #6b7280;
+  --light-muted: #9ca3af;
+
+  --border: #e5e7eb;
+  --border-light: #edf0f3;
+
+  --surface: #ffffff;
+  --surface-hover: #fafbfc;
+
+  --danger: #dc2626;
+  --danger-bg: #fef2f2;
+
+  --radius: 12px;
+  --radius-lg: 16px;
+
+  --shadow-sm:
+    0 1px 2px rgba(16, 24, 40, 0.04);
+
+  --shadow:
+    0 4px 16px rgba(16, 24, 40, 0.06);
+
+  --shadow-lg:
+    0 16px 40px rgba(16, 24, 40, 0.12);
+}
+
+html {
+  min-height: 100%;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
-  background: #f6f7f9;
+
+  background: #f7f8fa;
+  color: var(--text);
+
+  direction: rtl;
+
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 button,
@@ -23,178 +73,265 @@ button {
   cursor: pointer;
 }
 
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
 .hidden {
   display: none !important;
 }
 
 
-/* Header */
+/* =========================================================
+   Header
+   ========================================================= */
 
 .header {
-  height: 82px;
-  background: #ffffff;
-  border-bottom: 1px solid #e8e8e8;
+  height: 72px;
+
+  background: rgba(255, 255, 255, 0.96);
+
+  border-bottom: 1px solid var(--border);
 
   display: flex;
   align-items: center;
   justify-content: space-between;
 
   padding: 0 5%;
+
+  position: sticky;
+  top: 0;
+
+  z-index: 20;
+
+  backdrop-filter: blur(10px);
 }
 
 .brand {
   display: flex;
   align-items: center;
-  gap: 13px;
+  gap: 12px;
 }
 
 .logo {
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
 
-  border-radius: 11px;
+  border-radius: 10px;
+
+  background: #111827;
+  color: #ffffff;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  background: #111;
-  color: white;
+  font-size: 19px;
+  font-weight: 700;
 
-  font-size: 22px;
-  font-weight: bold;
+  box-shadow:
+    0 2px 5px rgba(0, 0, 0, 0.12);
 }
 
 .brand h1 {
   margin: 0;
-  font-size: 21px;
+
+  font-size: 19px;
+  line-height: 1.2;
+
+  font-weight: 700;
+
+  letter-spacing: -0.2px;
 }
 
 .brand p {
-  margin: 4px 0 0;
-  color: #888;
-  font-size: 13px;
+  margin: 3px 0 0;
+
+  color: var(--muted);
+
+  font-size: 12px;
 }
 
 
-/* Buttons */
+/* =========================================================
+   Buttons
+   ========================================================= */
 
-.primary-btn {
-  border: 0;
-  border-radius: 10px;
+.primary-btn,
+.secondary-btn,
+.back-btn {
+  min-height: 40px;
 
-  background: #111;
-  color: white;
+  border-radius: 9px;
 
-  padding: 11px 17px;
+  padding: 0 15px;
 
+  font-size: 14px;
   font-weight: 600;
 
-  transition: 0.18s;
+  transition:
+    background 0.16s ease,
+    border-color 0.16s ease,
+    transform 0.16s ease,
+    box-shadow 0.16s ease;
+}
+
+.primary-btn {
+  border: 1px solid var(--primary);
+
+  background: var(--primary);
+  color: white;
+
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.08);
 }
 
 .primary-btn:hover {
+  background: var(--primary-hover);
+
   transform: translateY(-1px);
-  opacity: 0.9;
+
+  box-shadow:
+    0 4px 10px rgba(17, 24, 39, 0.14);
+}
+
+.primary-btn:active {
+  transform: translateY(0);
 }
 
 .secondary-btn,
 .back-btn {
-  border: 1px solid #ddd;
-  border-radius: 10px;
+  border: 1px solid var(--border);
 
   background: white;
+  color: var(--text);
 
-  padding: 10px 15px;
-
-  transition: 0.18s;
+  box-shadow: var(--shadow-sm);
 }
 
 .secondary-btn:hover,
 .back-btn:hover {
-  background: #f2f2f2;
+  background: #f9fafb;
+  border-color: #d7dce2;
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
 }
 
 
-/* Main */
+/* =========================================================
+   Main
+   ========================================================= */
 
 main {
   width: min(1180px, 90%);
-  margin: auto;
-  padding: 42px 0 80px;
+
+  margin: 0 auto;
+
+  padding: 40px 0 80px;
 }
 
 .page-heading {
-  margin-bottom: 25px;
+  margin-bottom: 26px;
 }
 
 .page-heading h2,
 .folder-title h2 {
   margin: 0;
-  font-size: 25px;
+
+  font-size: 26px;
+  line-height: 1.25;
+
+  font-weight: 700;
+
+  letter-spacing: -0.5px;
 }
 
 .page-heading p,
 .folder-title p {
-  color: #888;
+  color: var(--muted);
+
   margin: 7px 0 0;
+
   font-size: 14px;
 }
 
 
-/* Folders */
+/* =========================================================
+   Folders
+   ========================================================= */
 
 .folders-grid {
   display: grid;
 
   grid-template-columns:
-    repeat(auto-fill, minmax(235px, 1fr));
+    repeat(auto-fill, minmax(230px, 1fr));
 
-  gap: 18px;
+  gap: 16px;
 }
 
 .folder-card {
-  background: white;
+  position: relative;
 
-  border: 1px solid #e9e9e9;
-  border-radius: 15px;
+  background: var(--surface);
 
-  padding: 22px;
+  border: 1px solid var(--border);
+
+  border-radius: var(--radius-lg);
+
+  padding: 20px;
 
   cursor: pointer;
 
+  box-shadow: var(--shadow-sm);
+
   transition:
-    transform 0.18s,
-    box-shadow 0.18s;
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease,
+    background 0.18s ease;
 }
 
 .folder-card:hover {
-  transform: translateY(-3px);
+  background: var(--surface-hover);
 
-  box-shadow:
-    0 12px 30px rgba(0,0,0,0.07);
+  border-color: #d9dee5;
+
+  transform: translateY(-2px);
+
+  box-shadow: var(--shadow);
 }
 
 .folder-icon {
-  width: 54px;
-  height: 54px;
+  width: 48px;
+  height: 48px;
 
-  border-radius: 13px;
+  border-radius: 11px;
 
-  background: #f1f2f4;
+  background: #f1f5f9;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  font-size: 28px;
+  font-size: 25px;
 
-  margin-bottom: 17px;
+  margin-bottom: 16px;
 }
 
 .folder-name {
-  font-size: 17px;
-  font-weight: bold;
+  padding-left: 5px;
+
+  font-size: 16px;
+  font-weight: 650;
+
+  line-height: 1.4;
 
   overflow: hidden;
   text-overflow: ellipsis;
@@ -202,37 +339,49 @@ main {
 }
 
 .folder-files {
-  color: #888;
+  color: var(--muted);
+
   font-size: 13px;
-  margin-top: 6px;
+
+  margin-top: 5px;
 }
 
 
-/* Folder header */
+/* =========================================================
+   Folder Header
+   ========================================================= */
 
 .folder-top {
   display: flex;
   align-items: center;
-  gap: 18px;
+
+  gap: 14px;
 
   margin-bottom: 28px;
 }
 
 .folder-title {
   flex: 1;
+  min-width: 0;
 }
 
 .actions {
   display: flex;
-  gap: 9px;
+  align-items: center;
+
+  gap: 8px;
 }
 
 .upload-btn {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 
-/* Files */
+/* =========================================================
+   Files
+   ========================================================= */
 
 .files-grid {
   display: grid;
@@ -240,49 +389,72 @@ main {
   grid-template-columns:
     repeat(auto-fill, minmax(220px, 1fr));
 
-  gap: 18px;
+  gap: 16px;
 }
 
 .file-card {
+  position: relative;
+
   background: white;
 
-  border: 1px solid #e7e7e7;
-  border-radius: 14px;
+  border: 1px solid var(--border);
+
+  border-radius: var(--radius-lg);
 
   overflow: hidden;
 
   cursor: pointer;
 
+  box-shadow: var(--shadow-sm);
+
   transition:
-    transform 0.18s,
-    box-shadow 0.18s;
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
 }
 
 .file-card:hover {
-  transform: translateY(-3px);
+  border-color: #d9dee5;
 
-  box-shadow:
-    0 12px 28px rgba(0,0,0,0.08);
+  transform: translateY(-2px);
+
+  box-shadow: var(--shadow);
 }
 
 .file-preview {
   display: block;
 
   width: 100%;
-  height: 230px;
+  height: 235px;
 
   object-fit: cover;
 
-  background: #eee;
+  background:
+    linear-gradient(
+      135deg,
+      #f3f4f6,
+      #e5e7eb
+    );
 }
 
 .file-info {
   padding: 13px 15px;
+
+  min-height: 54px;
+
+  display: flex;
+  align-items: center;
 }
 
 .file-name {
+  flex: 1;
+
+  min-width: 0;
+
   font-size: 14px;
   font-weight: 600;
+
+  color: #263143;
 
   overflow: hidden;
   text-overflow: ellipsis;
@@ -290,114 +462,290 @@ main {
 }
 
 
-/* Empty */
+/* =========================================================
+   Empty State
+   ========================================================= */
 
 .empty {
   text-align: center;
-  padding: 85px 20px;
-  color: #888;
+
+  padding: 90px 20px;
+
+  color: var(--muted);
 }
 
 .empty-icon {
-  font-size: 52px;
-  margin-bottom: 12px;
-}
+  width: 62px;
+  height: 62px;
 
-.empty h3 {
-  color: #333;
-  margin: 0 0 6px;
-}
+  margin: 0 auto 16px;
 
-.empty p {
-  margin: 0;
-}
+  border-radius: 16px;
 
-
-/* Status */
-
-.status {
-  min-height: 24px;
-  text-align: center;
-
-  color: #666;
-
-  margin: -10px 0 18px;
-}
-
-
-/* Modal */
-
-.modal {
-  position: fixed;
-  inset: 0;
-
-  background: rgba(0,0,0,0.48);
+  background: #eef1f5;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
+  font-size: 29px;
+}
+
+.empty h3 {
+  color: #374151;
+
+  margin: 0 0 7px;
+
+  font-size: 17px;
+}
+
+.empty p {
+  margin: 0;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   Status
+   ========================================================= */
+
+.status {
+  min-height: 24px;
+
+  text-align: center;
+
+  color: var(--muted);
+
+  font-size: 13px;
+
+  margin: -8px 0 18px;
+}
+
+
+/* =========================================================
+   Delete Buttons
+   ========================================================= */
+
+.delete-folder-btn,
+.delete-file-btn {
+  position: absolute;
+
+  border: 1px solid transparent;
+
+  background: rgba(255, 255, 255, 0.94);
+
+  color: #6b7280;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  opacity: 0;
+
+  transform: scale(0.94);
+
+  box-shadow:
+    0 2px 7px rgba(0, 0, 0, 0.08);
+
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease,
+    background 0.18s ease,
+    color 0.18s ease;
+}
+
+.delete-folder-btn {
+  top: 12px;
+  left: 12px;
+
+  width: 34px;
+  height: 34px;
+
+  border-radius: 9px;
+
+  font-size: 15px;
+}
+
+.delete-file-btn {
+  top: 10px;
+  left: 10px;
+
+  width: 34px;
+  height: 34px;
+
+  border-radius: 9px;
+
+  font-size: 15px;
+}
+
+.folder-card:hover .delete-folder-btn,
+.file-card:hover .delete-file-btn {
+  opacity: 1;
+
+  transform: scale(1);
+}
+
+.delete-folder-btn:hover,
+.delete-file-btn:hover {
+  background: var(--danger-bg);
+
+  color: var(--danger);
+
+  border-color: #fecaca;
+
+  transform: scale(1.04);
+}
+
+.delete-folder-btn:active,
+.delete-file-btn:active {
+  transform: scale(0.96);
+}
+
+
+/* =========================================================
+   Modal
+   ========================================================= */
+
+.modal {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(15, 23, 42, 0.48);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
   z-index: 50;
+
+  backdrop-filter: blur(3px);
 }
 
 .modal-box {
-  width: min(410px, 90%);
+  width: min(430px, 100%);
 
   background: white;
 
+  border: 1px solid rgba(255, 255, 255, 0.8);
+
   border-radius: 18px;
 
-  padding: 30px;
+  padding: 28px;
 
   position: relative;
 
-  box-shadow:
-    0 25px 80px rgba(0,0,0,0.2);
+  box-shadow: var(--shadow-lg);
+
+  animation: modalIn 0.18s ease;
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .modal-icon {
-  font-size: 35px;
-  margin-bottom: 10px;
+  width: 46px;
+  height: 46px;
+
+  border-radius: 12px;
+
+  background: #f1f5f9;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 23px;
+
+  margin-bottom: 14px;
 }
 
 .modal-box h2 {
   margin: 0;
+
+  font-size: 20px;
 }
 
 .modal-box p {
-  color: #888;
-  margin: 6px 0 18px;
+  color: var(--muted);
+
+  margin: 7px 0 18px;
+
+  font-size: 14px;
 }
 
 .modal-box input {
   width: 100%;
 
-  border: 1px solid #ddd;
-  border-radius: 10px;
+  height: 44px;
 
-  padding: 13px;
+  border: 1px solid var(--border);
+
+  border-radius: 9px;
+
+  padding: 0 13px;
 
   outline: none;
+
+  color: var(--text);
+
+  background: white;
+
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
 
   margin-bottom: 12px;
 }
 
 .modal-box input:focus {
-  border-color: #999;
+  border-color: #9ca3af;
+
+  box-shadow:
+    0 0 0 3px rgba(107, 114, 128, 0.1);
 }
 
 .modal-close {
   position: absolute;
 
-  top: 12px;
+  top: 13px;
   left: 15px;
 
+  width: 34px;
+  height: 34px;
+
   border: 0;
+
+  border-radius: 8px;
+
   background: transparent;
 
-  font-size: 28px;
+  font-size: 23px;
 
-  color: #777;
+  color: #6b7280;
+
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.modal-close:hover {
+  background: #f3f4f6;
+
+  color: #111827;
 }
 
 .full {
@@ -405,19 +753,23 @@ main {
 }
 
 
-/* Viewer */
+/* =========================================================
+   Viewer
+   ========================================================= */
 
 .viewer {
   position: fixed;
   inset: 0;
 
-  background: rgba(10,10,10,0.96);
+  background: rgba(9, 12, 18, 0.97);
 
   z-index: 100;
 
   display: flex;
   align-items: center;
   justify-content: center;
+
+  padding: 30px;
 }
 
 .viewer-center {
@@ -428,18 +780,23 @@ main {
 }
 
 .viewer-center img {
+  display: block;
+
   max-width: 84vw;
-  max-height: 80vh;
+  max-height: 78vh;
 
   object-fit: contain;
 
-  border-radius: 7px;
+  border-radius: 8px;
+
+  box-shadow:
+    0 20px 70px rgba(0, 0, 0, 0.35);
 }
 
 .viewer-name {
-  color: white;
+  color: rgba(255, 255, 255, 0.9);
 
-  margin-top: 10px;
+  margin-top: 12px;
 
   font-size: 14px;
 }
@@ -447,221 +804,325 @@ main {
 .viewer-close {
   position: absolute;
 
-  top: 18px;
-  right: 25px;
+  top: 17px;
+  right: 23px;
+
+  width: 44px;
+  height: 44px;
 
   border: 0;
-  background: transparent;
+
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.08);
 
   color: white;
 
-  font-size: 42px;
+  font-size: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition:
+    background 0.15s ease;
+}
+
+.viewer-close:hover {
+  background: rgba(255, 255, 255, 0.16);
 }
 
 .viewer-arrow {
   position: absolute;
 
   top: 50%;
+
   transform: translateY(-50%);
 
-  width: 54px;
-  height: 54px;
+  width: 50px;
+  height: 50px;
 
-  border: 0;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
   border-radius: 50%;
 
-  background: rgba(255,255,255,0.14);
+  background: rgba(255, 255, 255, 0.09);
 
   color: white;
 
-  font-size: 24px;
+  font-size: 22px;
 
-  transition: 0.18s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition:
+    background 0.15s ease,
+    transform 0.15s ease;
 }
 
 .viewer-arrow:hover {
-  background: rgba(255,255,255,0.25);
+  background: rgba(255, 255, 255, 0.17);
+
+  transform:
+    translateY(-50%)
+    scale(1.04);
 }
 
 .viewer-arrow.right {
-  right: 25px;
+  right: 24px;
 }
 
 .viewer-arrow.left {
-  left: 25px;
+  left: 24px;
 }
 
 .viewer-controls {
-  margin-top: 8px;
+  margin-top: 10px;
 }
 
 .viewer-controls button {
-  border: 0;
-  border-radius: 7px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  border-radius: 8px;
 
   padding: 7px 13px;
 
   margin: 2px;
+
+  background: rgba(255, 255, 255, 0.08);
+
+  color: white;
+
+  transition:
+    background 0.15s ease;
+}
+
+.viewer-controls button:hover {
+  background: rgba(255, 255, 255, 0.15);
 }
 
 
-/* Mobile */
+/* =========================================================
+   Focus / Accessibility
+   ========================================================= */
+
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid rgba(59, 130, 246, 0.25);
+
+  outline-offset: 2px;
+}
+
+
+/* =========================================================
+   Mobile
+   ========================================================= */
 
 @media (max-width: 700px) {
 
   .header {
+    height: 66px;
+
     padding: 0 4%;
   }
 
+  .brand {
+    gap: 9px;
+  }
+
+  .logo {
+    width: 36px;
+    height: 36px;
+
+    border-radius: 9px;
+
+    font-size: 17px;
+  }
+
   .brand h1 {
-    font-size: 18px;
+    font-size: 17px;
+  }
+
+  .brand p {
+    display: none;
   }
 
   .primary-btn {
-    padding: 9px 12px;
+    min-height: 38px;
+
+    padding: 0 11px;
+
+    font-size: 13px;
   }
 
   main {
-    width: 94%;
-    padding-top: 28px;
+    width: 92%;
+
+    padding:
+      28px 0
+      60px;
+  }
+
+  .page-heading {
+    margin-bottom: 20px;
+  }
+
+  .page-heading h2,
+  .folder-title h2 {
+    font-size: 22px;
   }
 
   .folder-top {
     align-items: stretch;
+
     flex-direction: column;
+
+    gap: 13px;
   }
 
   .actions {
-    flex-direction: column;
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 8px;
+  }
+
+  .actions button,
+  .actions label {
+    width: 100%;
+  }
+
+  .folders-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: 10px;
+  }
+
+  .folder-card {
+    padding: 15px;
+
+    border-radius: 13px;
+  }
+
+  .folder-icon {
+    width: 42px;
+    height: 42px;
+
+    font-size: 21px;
+
+    margin-bottom: 12px;
+  }
+
+  .folder-name {
+    font-size: 14px;
+  }
+
+  .folder-files {
+    font-size: 12px;
   }
 
   .files-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
     gap: 10px;
+  }
+
+  .file-card {
+    border-radius: 12px;
   }
 
   .file-preview {
     height: 155px;
   }
 
-  .viewer-arrow {
-    width: 45px;
-    height: 45px;
+  .file-info {
+    padding: 10px 11px;
+
+    min-height: 46px;
   }
 
-  .viewer-arrow.right {
-    right: 8px;
+  .file-name {
+    font-size: 12px;
   }
-
-  .viewer-arrow.left {
-    left: 8px;
-  }
-}
-/* =========================
-   Delete Buttons
-========================= */
-
-.folder-card,
-.file-card {
-  position: relative;
-}
-
-/* כפתור מחיקת תיקייה */
-.delete-folder-btn {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-
-  width: 36px;
-  height: 36px;
-
-  border: none;
-  border-radius: 10px;
-
-  background: rgba(255, 255, 255, 0.92);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 17px;
-
-  cursor: pointer;
-
-  opacity: 0;
-  transform: scale(0.9);
-
-  transition:
-    opacity 0.2s ease,
-    transform 0.2s ease,
-    background 0.2s ease;
-}
-
-/* כפתור מחיקת קובץ */
-.delete-file-btn {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-
-  width: 34px;
-  height: 34px;
-
-  border: none;
-  border-radius: 9px;
-
-  background: rgba(255, 255, 255, 0.92);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 16px;
-
-  cursor: pointer;
-
-  opacity: 0;
-  transform: scale(0.9);
-
-  transition:
-    opacity 0.2s ease,
-    transform 0.2s ease,
-    background 0.2s ease;
-}
-
-
-/* הצגת הכפתור במעבר עכבר */
-
-.folder-card:hover .delete-folder-btn,
-.file-card:hover .delete-file-btn {
-  opacity: 1;
-  transform: scale(1);
-}
-
-
-/* hover */
-
-.delete-folder-btn:hover,
-.delete-file-btn:hover {
-  background: #ffe8e8;
-  transform: scale(1.08);
-}
-
-
-/* לחיצה */
-
-.delete-folder-btn:active,
-.delete-file-btn:active {
-  transform: scale(0.94);
-}
-
-
-/* במובייל הכפתור תמיד נראה */
-
-@media (max-width: 700px) {
 
   .delete-folder-btn,
   .delete-file-btn {
     opacity: 1;
+
     transform: scale(1);
+  }
+
+  .empty {
+    padding: 65px 15px;
+  }
+
+  .viewer {
+    padding: 15px;
+  }
+
+  .viewer-center {
+    max-width: 96vw;
+  }
+
+  .viewer-center img {
+    max-width: 94vw;
+
+    max-height: 76vh;
+  }
+
+  .viewer-arrow {
+    width: 43px;
+    height: 43px;
+
+    font-size: 18px;
+  }
+
+  .viewer-arrow.right {
+    right: 7px;
+  }
+
+  .viewer-arrow.left {
+    left: 7px;
+  }
+
+  .viewer-close {
+    top: 10px;
+    right: 10px;
+
+    width: 40px;
+    height: 40px;
+  }
+
+  .modal {
+    padding: 15px;
+  }
+
+  .modal-box {
+    padding: 24px 20px;
+  }
+}
+
+
+/* =========================================================
+   Very Small Screens
+   ========================================================= */
+
+@media (max-width: 390px) {
+
+  .folders-grid,
+  .files-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .file-preview {
+    height: 200px;
+  }
+
+  .actions {
+    grid-template-columns: 1fr;
   }
 }
