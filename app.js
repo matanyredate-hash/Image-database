@@ -218,8 +218,6 @@ async function loadFolders() {
           : `${files.length} קבצים`;
 
 
-      /* כפתור מחיקה */
-
       const deleteButton =
         document.createElement("button");
 
@@ -402,7 +400,7 @@ async function deleteFolder(folder) {
       "מוחק תיקייה...";
 
 
-    /* קבלת הקבצים */
+    /* קבלת כל הקבצים */
 
     const files =
       await api(
@@ -410,9 +408,12 @@ async function deleteFolder(folder) {
       );
 
 
-    /* מחיקת הקבצים מה-Storage */
+    /*
+      קודם מוחקים את הקבצים
+      מה-Storage
+    */
 
-    for (const file of files) {
+    for (const file of files || []) {
 
       const response =
         await fetch(
@@ -426,18 +427,19 @@ async function deleteFolder(folder) {
 
       if (!response.ok) {
 
-        const errorText =
+        const text =
           await response.text();
 
         throw new Error(
-          errorText ||
-          `Storage error ${response.status}`
+          `מחיקת הקובץ מהאחסון נכשלה:\n${text}`
         );
       }
     }
 
 
-    /* מחיקת הרשומות */
+    /*
+      מחיקת רשומות הקבצים
+    */
 
     await api(
       `files?folder_id=eq.${folder.id}`,
@@ -447,7 +449,9 @@ async function deleteFolder(folder) {
     );
 
 
-    /* מחיקת התיקייה */
+    /*
+      מחיקת התיקייה
+    */
 
     await api(
       `folders?id=eq.${folder.id}`,
@@ -474,7 +478,10 @@ async function deleteFolder(folder) {
 
   } catch (error) {
 
-    console.error(error);
+    console.error(
+      "DELETE FOLDER ERROR:",
+      error
+    );
 
     alert(
       "מחיקת התיקייה נכשלה.\n\n" +
@@ -623,8 +630,6 @@ async function renderFiles() {
       file.name;
 
 
-    /* כפתור מחיקה */
-
     const deleteButton =
       document.createElement("button");
 
@@ -707,7 +712,9 @@ async function deleteFile(file) {
       "מוחק קובץ...";
 
 
-    /* Storage */
+    /*
+      מחיקה מה-Storage
+    */
 
     const response =
       await fetch(
@@ -721,17 +728,18 @@ async function deleteFile(file) {
 
     if (!response.ok) {
 
-      const errorText =
+      const text =
         await response.text();
 
       throw new Error(
-        errorText ||
-        `Storage error ${response.status}`
+        `מחיקת הקובץ מהאחסון נכשלה:\n${text}`
       );
     }
 
 
-    /* Database */
+    /*
+      מחיקה מהטבלה
+    */
 
     await api(
       `files?id=eq.${file.id}`,
@@ -758,7 +766,10 @@ async function deleteFile(file) {
 
   } catch (error) {
 
-    console.error(error);
+    console.error(
+      "DELETE FILE ERROR:",
+      error
+    );
 
     alert(
       "מחיקת הקובץ נכשלה.\n\n" +
@@ -945,7 +956,7 @@ async function uploadFile(file) {
         headers: {
           ...headers,
           "Content-Type":
-            file.type
+            file.type || "application/octet-stream"
         },
 
         body: file
