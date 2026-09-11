@@ -77,6 +77,12 @@ const noFiles =
 const folderCount =
   document.getElementById("folderCount");
 
+const folderSearch =
+  document.getElementById("folderSearch");
+
+const noFolderResults =
+  document.getElementById("noFolderResults");
+
 const fileCount =
   document.getElementById("fileCount");
 
@@ -146,6 +152,44 @@ let autoTimer = null;
 
 
 /* =========================
+   Local folder search
+========================= */
+
+folderSearch.addEventListener(
+  "input",
+  () => {
+
+    const query =
+      folderSearch.value.trim().toLocaleLowerCase("he");
+
+    const cards =
+      [...foldersGrid.children];
+
+    let visible = 0;
+
+    for (const card of cards) {
+
+      const matches =
+        card.dataset.folderName
+          .toLocaleLowerCase("he")
+          .includes(query);
+
+      card.classList.toggle("hidden", !matches);
+
+      if (matches) {
+        visible++;
+      }
+    }
+
+    noFolderResults.classList.toggle(
+      "hidden",
+      !query || visible > 0
+    );
+  }
+);
+
+
+/* =========================
    Folders
 ========================= */
 
@@ -159,6 +203,9 @@ async function loadFolders() {
       );
 
     foldersGrid.innerHTML = "";
+
+    folderSearch.value = "";
+    noFolderResults.classList.add("hidden");
 
     folderCount.textContent =
       folders.length === 1
@@ -184,6 +231,9 @@ async function loadFolders() {
 
       card.className =
         "folder-card";
+
+      card.dataset.folderName =
+        folder.name;
 
 
       const icon =
