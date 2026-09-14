@@ -110,3 +110,370 @@ main{width:min(1280px,calc(100% - 56px));margin:0 auto;padding:48px 0 90px}
   .folder-top{display:flex;flex-wrap:wrap;align-items:center}.folder-title{width:100%;order:-1}.actions{flex:1;min-width:0}.actions .secondary-btn,.actions .upload-btn{flex:1;min-width:0;padding:0 9px}.back-btn{white-space:nowrap}
   .viewer{padding:28px 16px}.viewer-arrow{width:40px;height:40px}.viewer-arrow.right{right:8px}.viewer-arrow.left{left:8px}.viewer-center img{max-height:calc(100vh - 150px)}
 }
+/* =========================================================
+   CHORDBOOK — SONG / CHORD PAGE UPGRADE
+   ========================================================= */
+
+/* דף השיר */
+.song-page-header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 28px;
+  margin-bottom: 26px;
+  padding: 26px 0 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.song-heading {
+  min-width: 0;
+  text-align: right;
+}
+
+.song-heading h2 {
+  margin: 0;
+  font-size: clamp(30px, 4vw, 46px);
+  line-height: 1.08;
+  font-weight: 800;
+  letter-spacing: -1.3px;
+  color: var(--ink);
+}
+
+.song-heading .eyebrow {
+  margin-bottom: 10px !important;
+}
+
+.song-meta {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.meta-separator {
+  color: #c3c8cf;
+}
+
+.song-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  white-space: nowrap;
+}
+
+/* אזור האקורדים */
+.chords-section {
+  width: min(900px, 100%);
+  margin: 0 auto;
+}
+
+.chords-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px 13px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+}
+
+.chords-section-heading span:first-child {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.chords-section-heading span:last-child {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* =========================================================
+   העמודים הופכים ל"דף אקורדים" רציף
+   ========================================================= */
+
+.files-grid {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+}
+
+/* מבטל את המראה של כרטיס גלריה */
+.file-card {
+  width: 100%;
+  max-width: 860px;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
+  cursor: pointer;
+  box-shadow: none;
+  transform: none !important;
+}
+
+/* בלי אפקט כרטיס */
+.file-card:hover {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+/* התמונה עצמה הופכת לעמוד אקורדים */
+.file-preview {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: auto;
+  object-fit: contain;
+
+  background: #fff;
+  border: 1px solid #e1e4e8;
+  border-radius: 5px;
+
+  box-shadow:
+    0 1px 2px rgba(18,27,42,.04),
+    0 8px 28px rgba(18,27,42,.06);
+
+  transition:
+    box-shadow .18s ease,
+    transform .18s ease;
+}
+
+.file-card:hover .file-preview {
+  box-shadow:
+    0 3px 5px rgba(18,27,42,.06),
+    0 14px 34px rgba(18,27,42,.09);
+
+  transform: translateY(-2px);
+}
+
+/* שם הקובץ הופך לכיתוב קטן מתחת לעמוד */
+.file-info {
+  min-height: auto;
+  padding: 8px 4px 0;
+  background: transparent;
+  justify-content: center;
+}
+
+.file-name {
+  flex: none;
+  color: #9299a4;
+  font-size: 11px;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* כפתור מחיקה */
+.delete-file-btn {
+  top: 12px;
+  left: 12px;
+  opacity: 0;
+}
+
+.file-card:hover .delete-file-btn,
+.file-card:focus-within .delete-file-btn {
+  opacity: 1;
+}
+
+/* =========================================================
+   מראה של "ספר אקורדים"
+   ========================================================= */
+
+#folderPage {
+  animation: songPageIn .22s ease;
+}
+
+@keyframes songPageIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* פס עדין מעל אזור הקריאה */
+.chords-section::before {
+  content: "";
+  display: block;
+  width: 42px;
+  height: 3px;
+  margin: 0 auto 18px;
+  border-radius: 10px;
+  background: var(--gold);
+}
+
+/* =========================================================
+   כפתורי הדף
+   ========================================================= */
+
+.song-actions .secondary-btn {
+  min-width: 92px;
+}
+
+.song-actions .primary-btn {
+  min-width: 126px;
+}
+
+/* =========================================================
+   מסכים בינוניים
+   ========================================================= */
+
+@media (max-width: 820px) {
+
+  .song-page-header {
+    grid-template-columns: 1fr;
+    gap: 17px;
+    align-items: stretch;
+  }
+
+  .song-heading {
+    order: 1;
+  }
+
+  .song-actions {
+    order: 2;
+    width: 100%;
+  }
+
+  .song-actions .secondary-btn,
+  .song-actions .upload-btn {
+    flex: 1;
+  }
+
+  #backBtn {
+    order: 0;
+    justify-self: start;
+  }
+
+  .chords-section {
+    width: 100%;
+  }
+
+  .file-card {
+    max-width: 100%;
+  }
+}
+
+/* =========================================================
+   מובייל
+   ========================================================= */
+
+@media (max-width: 560px) {
+
+  .song-page-header {
+    padding-top: 18px;
+    margin-bottom: 20px;
+  }
+
+  .song-heading h2 {
+    font-size: 30px;
+    letter-spacing: -.8px;
+  }
+
+  .song-meta {
+    font-size: 13px;
+  }
+
+  .song-actions {
+    gap: 7px;
+  }
+
+  .song-actions .secondary-btn,
+  .song-actions .upload-btn {
+    min-height: 42px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 13px;
+  }
+
+  .chords-section-heading {
+    padding-bottom: 11px;
+  }
+
+  .chords-section-heading span:first-child {
+    font-size: 16px;
+  }
+
+  .chords-section-heading span:last-child {
+    font-size: 11px;
+  }
+
+  .files-grid {
+    gap: 15px;
+  }
+
+  .file-preview {
+    border-radius: 3px;
+    box-shadow:
+      0 1px 2px rgba(18,27,42,.04),
+      0 5px 18px rgba(18,27,42,.05);
+  }
+
+  .file-info {
+    padding-top: 5px;
+  }
+
+  .delete-file-btn {
+    opacity: 1;
+  }
+}
+
+/* =========================================================
+   הדפסה — אפשר להדפיס את דף האקורדים נקי
+   ========================================================= */
+
+@media print {
+
+  .header,
+  .song-actions,
+  #backBtn,
+  .delete-file-btn,
+  .chords-section-heading,
+  .file-info {
+    display: none !important;
+  }
+
+  body {
+    background: #fff;
+  }
+
+  main {
+    width: 100%;
+    padding: 0;
+  }
+
+  .song-page-header {
+    display: block;
+    border: 0;
+    margin-bottom: 20px;
+  }
+
+  .song-heading {
+    text-align: center;
+  }
+
+  .chords-section {
+    width: 100%;
+  }
+
+  .files-grid {
+    gap: 0;
+  }
+
+  .file-card {
+    max-width: 100%;
+    page-break-inside: avoid;
+  }
+
+  .file-preview {
+    border: 0;
+    box-shadow: none;
+    border-radius: 0;
+  }
+}
