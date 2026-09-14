@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ספריית תמונות</title>
+  <title>Chordbook | ספריית אקורדים</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -16,8 +16,8 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9" r="1.4"/><path d="m4 17 5.1-5 3.4 3.2 2.4-2.3L20 17"/></svg>
     </div>
     <div>
-      <h1>Image Database</h1>
-      <p>ספריית התמונות שלך</p>
+      <h1>Chordbook</h1>
+      <p>ספריית השירים שלך</p>
     </div>
     </div>
 
@@ -29,145 +29,61 @@
 </header>
 
 <main>
-
-  <!-- מסך תיקיות -->
   <section id="foldersPage">
-
     <div class="page-heading">
       <div>
-        <p class="eyebrow">ספריית מדיה</p>
-        <h2>התיקיות שלך</h2>
+        <p class="eyebrow">ספריית שירים</p>
+        <h2>השירים שלך</h2>
         <p id="folderCount">0 תיקיות</p>
       </div>
       <label class="search-field" for="folderSearch">
         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="6"/><path d="m16 16 4 4"/></svg>
-        <input id="folderSearch" type="search" placeholder="חיפוש תיקייה" autocomplete="off">
+        <input id="folderSearch" type="search" placeholder="חיפוש שיר" autocomplete="off">
       </label>
     </div>
-
     <div id="foldersGrid" class="folders-grid"></div>
-
-    <div id="noFolders" class="empty">
-      <div class="empty-icon">📁</div>
-      <h3>עדיין אין תיקיות</h3>
-      <p>צור תיקייה חדשה כדי להתחיל</p>
-    </div>
-
-    <div id="noFolderResults" class="empty hidden">
-      <div class="empty-icon">⌕</div>
-      <h3>לא נמצאו תיקיות</h3>
-      <p>נסה לחפש בשם אחר</p>
-    </div>
-
+    <div id="noFolders" class="empty"><div class="empty-icon">📁</div><h3>עדיין אין תיקיות</h3><p>צור תיקייה חדשה כדי להתחיל</p></div>
+    <div id="noFolderResults" class="empty hidden"><div class="empty-icon">⌕</div><h3>לא נמצאו תיקיות</h3><p>נסה לחפש בשם אחר</p></div>
   </section>
 
-
-  <!-- מסך תיקייה -->
   <section id="folderPage" class="hidden">
-
-    <div class="folder-top">
-
-      <button id="backBtn" class="back-btn">
-        → תיקיות
-      </button>
-
-      <div class="folder-title">
-        <p class="eyebrow">תיקייה</p>
+    <div class="song-page-header">
+      <button id="backBtn" class="back-btn">→ לכל השירים</button>
+      <div class="song-heading">
+        <p class="eyebrow">דף אקורדים</p>
         <h2 id="folderTitle"></h2>
-        <p id="fileCount"></p>
+        <div class="song-meta"><span>אקורדים וטאבים</span><span class="meta-separator" aria-hidden="true">•</span><span id="fileCount"></span></div>
       </div>
-
-      <div class="actions">
-
-        <button id="autoBtn" class="secondary-btn">
-          ▶ הצגה אוטומטית
-        </button>
-
-        <label class="primary-btn upload-btn">
-          ＋ הוסף קבצים
-          <input
-            id="fileInput"
-            type="file"
-            accept="image/*"
-            multiple
-            hidden
-          >
-        </label>
-
+      <div class="song-actions">
+        <button id="autoBtn" class="secondary-btn" title="הצג את התמונות ברצף">▶ נגן</button>
+        <label class="primary-btn upload-btn">＋ הוסף עמודים<input id="fileInput" type="file" accept="image/*" multiple hidden></label>
       </div>
-
     </div>
 
     <div id="uploadStatus" class="status"></div>
-
-    <div id="filesGrid" class="files-grid"></div>
-
-    <div id="noFiles" class="empty">
-      <div class="empty-icon">🖼️</div>
-      <h3>התיקייה ריקה</h3>
-      <p>הוסף תמונות כדי להתחיל</p>
-    </div>
-
+    <section class="chords-section" aria-label="תוכן האקורדים">
+      <div class="chords-section-heading"><span>אקורדים</span><span>גלול לקריאה</span></div>
+      <div id="filesGrid" class="files-grid"></div>
+    </section>
+    <div id="noFiles" class="empty"><div class="empty-icon">🖼️</div><h3>התיקייה ריקה</h3><p>הוסף תמונות כדי להתחיל</p></div>
   </section>
-
 </main>
 
-
-<!-- יצירת תיקייה -->
-
 <div id="folderModal" class="modal hidden">
-
   <div class="modal-box">
-
     <button id="closeModal" class="modal-close">×</button>
-
-    <div class="modal-icon">📁</div>
-
-    <h2>תיקייה חדשה</h2>
-    <p>בחר שם לתיקייה</p>
-
-    <input
-      id="folderName"
-      type="text"
-      placeholder="לדוגמה: אור התקווה 6"
-    >
-
-    <button id="createFolderBtn" class="primary-btn full">
-      צור תיקייה
-    </button>
-
+    <div class="modal-icon">📁</div><h2>תיקייה חדשה</h2><p>בחר שם לתיקייה</p>
+    <input id="folderName" type="text" placeholder="לדוגמה: אור התקווה 6">
+    <button id="createFolderBtn" class="primary-btn full">צור תיקייה</button>
   </div>
-
 </div>
-
-
-<!-- מציג תמונה -->
 
 <div id="viewer" class="viewer hidden">
-
   <button id="closeViewer" class="viewer-close">×</button>
-
   <button id="prevBtn" class="viewer-arrow right">→</button>
-
-  <div class="viewer-center">
-
-    <img id="viewerImage" src="" alt="">
-
-    <div id="viewerName" class="viewer-name"></div>
-
-    <div class="viewer-controls">
-      <button id="viewerPlay">▶</button>
-      <button id="viewerPause">⏸</button>
-    </div>
-
-  </div>
-
+  <div class="viewer-center"><img id="viewerImage" src="" alt=""><div id="viewerName" class="viewer-name"></div><div class="viewer-controls"><button id="viewerPlay">▶</button><button id="viewerPause">⏸</button></div></div>
   <button id="nextBtn" class="viewer-arrow left">←</button>
-
 </div>
-
-
 <script src="app.js"></script>
-
 </body>
 </html>
